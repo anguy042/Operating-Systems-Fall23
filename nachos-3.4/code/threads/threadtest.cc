@@ -15,6 +15,25 @@
 // testnum is set in main.cc
 int testnum = 1;
 
+#ifdef HW1_SEMAPHORES //SimpleThread() modified version:
+int SharedVariable;
+
+void SimpleThread(int which){
+    
+    int num, val;
+    for(num = 0; num < 5; num++){
+        val = SharedVariable;
+        printf("*** thread %d sees value %d\n", which, val);
+        currentThread->Yield();
+        SharedVariable = val+1;
+        currentThread->Yield();
+    }
+val = SharedVariable;
+printf("Thread %d sees final value %d\n", which, val);
+
+}
+
+#else //SimpleThread Original:
 //----------------------------------------------------------------------
 // SimpleThread
 // 	Loop 5 times, yielding the CPU to another ready thread 
@@ -34,6 +53,7 @@ SimpleThread(int which)
         currentThread->Yield();
     }
 }
+#endif //SimpleThread end
 
 //----------------------------------------------------------------------
 // ThreadTest1
@@ -56,7 +76,7 @@ ThreadTest1()
 // ThreadTest
 // 	Invoke a test routine.
 //----------------------------------------------------------------------
-#ifdef HW1_SEMAPHORES
+#ifdef HW1_SEMAPHORES //New version of ThreadTest():
 // Taken from TA's Materials ~~~~~~~~ 
 // Modified version of ThreadTest that takes an integer n
 // and creates n new threads, each calling SimpleThread and
@@ -80,7 +100,7 @@ ThreadTest(int n) {
 }
 
 
-#else
+#else //Original version of ThreadTest():
 void
 ThreadTest()
 {
@@ -94,4 +114,4 @@ ThreadTest()
 	break;
     }
 }
-#endif
+#endif //ThreadTest() end
