@@ -6,8 +6,11 @@
 # Copyright (c) 1992 The Regents of the University of California.
 # All rights reserved.  See copyright.h for copyright notice and limitation 
 # of liability and disclaimer of warranty provisions.
+# -DCHANGED is used to indicate code changed for the project.
+# -DHW1_SEMAPHORES is used only for the synchronization code as specified in 
+#  the exercise.
 
-DEFINES = -DTHREADS -DHW1_SEMAPHORES
+DEFINES = -DTHREADS -DCHANGED
 INCPATH = -I../threads -I../machine
 HFILES = $(THREAD_H)
 CFILES = $(THREAD_C)
