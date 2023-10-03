@@ -56,10 +56,35 @@ ThreadTest1()
 // ThreadTest
 // 	Invoke a test routine.
 //----------------------------------------------------------------------
+#ifdef HW1_SEMAPHORES
+// Taken from TA's Materials ~~~~~~~~ 
+// Modified version of ThreadTest that takes an integer n
+// and creates n new threads, each calling SimpleThread and
+// passing on their ID as argument.
 
+int numThreadsActive; // used to implement barrier upon completion
+
+void
+ThreadTest(int n) {
+    DEBUG('t', "Entering SimpleTest");
+    Thread *t;
+    numThreadsActive = n;
+    printf("NumthreadsActive = %d\n", numThreadsActive);
+
+    for(int i=1; i<n; i++)
+    {
+        t = new Thread("forked thread");
+        t->Fork(SimpleThread,i);
+    }
+    SimpleThread(0);
+}
+
+
+#else
 void
 ThreadTest()
 {
+    //printf("I changed Nachos and it is still working.");
     switch (testnum) {
     case 1:
 	ThreadTest1();
@@ -69,4 +94,4 @@ ThreadTest()
 	break;
     }
 }
-
+#endif

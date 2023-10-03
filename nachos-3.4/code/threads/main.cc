@@ -59,7 +59,13 @@ extern int testnum;
 
 // External functions used by this file
 
+#ifdef HW1_SEMAPHORES
+//We may be able to simply overload the ThreadTest() function, 
+//but I will use an ifdef here as well to be consistent:
+extern void ThreadTest(int n), Copy(char *unixFile, char *nachosFile);
+#else
 extern void ThreadTest(void), Copy(char *unixFile, char *nachosFile);
+#endif
 extern void Print(char *file), PerformanceTest(void);
 extern void StartProcess(char *file), ConsoleTest(char *in, char *out);
 extern void MailTest(int networkID);
@@ -101,7 +107,15 @@ main(int argc, char **argv)
       }
     }
 
+	#ifdef HW1_SEMAPHORES
+	//Provide an integer argument for the HW1_SEMAPHORES
+	//version of the code:
+	int n = 4;
+	ThreadTest(n);
+
+	#else
     ThreadTest();
+	#endif
 #endif
 
     for (argc--, argv++; argc > 0; argc -= argCount, argv += argCount) {
