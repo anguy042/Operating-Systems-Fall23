@@ -15,7 +15,7 @@
 // testnum is set in main.cc
 int testnum = 1;
 
-#ifdef CHANGED //SimpleThread() modified version:
+#ifdef HW1_SEMAPHORES //SimpleThread() modified version:
 int SharedVariable;
 
 void SimpleThread(int which){
@@ -76,7 +76,7 @@ ThreadTest1()
 // ThreadTest
 // 	Invoke a test routine.
 //----------------------------------------------------------------------
-#ifdef CHANGED //New version of ThreadTest():
+#ifdef HW1_SEMAPHORES
 // Taken from TA's Materials ~~~~~~~~ 
 // Modified version of ThreadTest that takes an integer n
 // and creates n new threads, each calling SimpleThread and
