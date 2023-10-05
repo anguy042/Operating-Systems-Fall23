@@ -11,10 +11,48 @@
 
 #include "copyright.h"
 #include "system.h"
+#include "synch.h"
 
 // testnum is set in main.cc
 int testnum = 1;
 
+#ifdef HW1_SEMAPHORES //SimpleThread() modified version:
+int numThreadsActive; // used to implement barrier upon completion
+int SharedVariable;
+Semaphore *mutex = new Semaphore("simple_thread_semaphore", 1);
+
+void SimpleThread(int which){
+
+    int num, val;
+    for(num = 0; num < 5; num++){
+
+        //Entry section----------
+        mutex->P();
+
+        val = SharedVariable;
+        printf("*** thread %d sees value %d\n", which, val);
+        currentThread->Yield();
+        SharedVariable = val+1;
+
+        //Exit section------------
+        mutex->V();
+
+        currentThread->Yield();
+    }
+
+    numThreadsActive = numThreadsActive - 1; //Should I synchronize this?
+
+    while(numThreadsActive > 0){
+        currentThread->Yield();
+    }
+
+
+val = SharedVariable;
+printf("Thread %d sees final value %d\n", which, val);
+
+}
+
+#else //SimpleThread Original:
 //----------------------------------------------------------------------
 // SimpleThread
 // 	Loop 5 times, yielding the CPU to another ready thread 
@@ -34,6 +72,7 @@ SimpleThread(int which)
         currentThread->Yield();
     }
 }
+#endif //SimpleThread end
 
 //----------------------------------------------------------------------
 // ThreadTest1
@@ -56,10 +95,35 @@ ThreadTest1()
 // ThreadTest
 // 	Invoke a test routine.
 //----------------------------------------------------------------------
+#ifdef HW1_SEMAPHORES
+// Taken from TA's Materials ~~~~~~~~ 
+// Modified version of ThreadTest that takes an integer n
+// and creates n new threads, each calling SimpleThread and
+// passing on their ID as argument.
 
+
+
+void
+ThreadTest(int n) {
+    DEBUG('t', "Entering SimpleTest");
+    Thread *t;
+    numThreadsActive = n;
+    printf("NumthreadsActive = %d\n", numThreadsActive);
+
+    for(int i=1; i<n; i++)
+    {
+        t = new Thread("forked thread");
+        t->Fork(SimpleThread,i);
+    }
+    SimpleThread(0);
+}
+
+
+#else //Original version of ThreadTest():
 void
 ThreadTest()
 {
+    //printf("I changed Nachos and it is still working.");
     switch (testnum) {
     case 1:
 	ThreadTest1();
@@ -69,4 +133,4 @@ ThreadTest()
 	break;
     }
 }
-
+#endif //ThreadTest() end
