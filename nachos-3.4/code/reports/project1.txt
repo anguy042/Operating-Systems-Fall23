@@ -6,7 +6,7 @@ Annie Nguyen
 Trang Trang
 
 EXERCISE 1 NOTES
-Part 1)
+
 After updating the code for SimpleThread() and testing values 0-4, I was originally confused by a couple things. Firstly, 
 the output for n=0 and n=1 is identical except n=0 claims that “0 threads are running”, however this is easily explained
 by the fact that the for loop inside the updated ThreadTest() evaluates to false for both n=0 and n=1, and only calls 
@@ -16,4 +16,9 @@ The second thing that confused me is that for all tests 0 through 4, all threads
 and then saw the same final value. I was not sure if they were already synchronized. But after looking at the code, I 
 believe that proper synchronization will allow the threads to take turns adding 1 at each stage, thus they should all 
 see increments of 1, but still see the same final value. I will implement the semaphores and see. 
+
+After implementing the semaphores, I can see that now the threads each take turns incrementing the value by 1,
+and then they all see the same value at the end. Even when the -rs value is used the threads take turns out of order.
+
+
 

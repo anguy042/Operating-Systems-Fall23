@@ -11,23 +11,42 @@
 
 #include "copyright.h"
 #include "system.h"
+#include "synch.h"
 
 // testnum is set in main.cc
 int testnum = 1;
 
 #ifdef HW1_SEMAPHORES //SimpleThread() modified version:
+int numThreadsActive; // used to implement barrier upon completion
 int SharedVariable;
+Semaphore *mutex = new Semaphore("simple_thread_semaphore", 1);
 
 void SimpleThread(int which){
 
     int num, val;
     for(num = 0; num < 5; num++){
+
+        //Entry section----------
+        mutex->P();
+
         val = SharedVariable;
         printf("*** thread %d sees value %d\n", which, val);
         currentThread->Yield();
         SharedVariable = val+1;
+
+        //Exit section------------
+        mutex->V();
+
         currentThread->Yield();
     }
+
+    numThreadsActive = numThreadsActive - 1; //Should I synchronize this?
+
+    while(numThreadsActive > 0){
+        currentThread->Yield();
+    }
+
+
 val = SharedVariable;
 printf("Thread %d sees final value %d\n", which, val);
 
@@ -82,7 +101,7 @@ ThreadTest1()
 // and creates n new threads, each calling SimpleThread and
 // passing on their ID as argument.
 
-int numThreadsActive; // used to implement barrier upon completion
+
 
 void
 ThreadTest(int n) {
