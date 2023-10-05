@@ -10,7 +10,7 @@
 # -DHW1_SEMAPHORES is used only for the synchronization code as specified in 
 #  the exercise.
 
-DEFINES = -DTHREADS -DHW1_SEMAPHORES
+DEFINES = -DTHREADS -DHW1_SEMAPHORES -DHW1_LOCKS
 INCPATH = -I../threads -I../machine
 HFILES = $(THREAD_H)
 CFILES = $(THREAD_C)
