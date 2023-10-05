@@ -100,10 +100,36 @@ Semaphore::V()
 // Dummy functions -- so we can compile our later assignments 
 // Note -- without a correct implementation of Condition::Wait(), 
 // the test case in the network assignment won't work!
+#ifdef HW1_LOCKS
+Lock::Lock(const char* debugName) {
+    name = debugName;
+    free = true;
+    queue = new List;
+}
+Lock::~Lock() {
+    delete queue;
+
+}
+
+void Lock::Acquire() {
+    free = false;
+}
+
+void Lock::Release() {
+    free = true;
+}
+
+bool Lock::isHeldByCurrentThread(){
+
+}
+
+#else
 Lock::Lock(const char* debugName) {}
 Lock::~Lock() {}
 void Lock::Acquire() {}
 void Lock::Release() {}
+
+#endif
 
 Condition::Condition(const char* debugName) { }
 Condition::~Condition() { }
