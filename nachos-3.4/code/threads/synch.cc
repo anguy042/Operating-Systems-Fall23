@@ -100,7 +100,6 @@ Semaphore::V()
 // Dummy functions -- so we can compile our later assignments 
 // Note -- without a correct implementation of Condition::Wait(), 
 // the test case in the network assignment won't work!
-#ifdef HW1_LOCKS
 Lock::Lock(const char* debugName) {
     name = debugName;
     free = true;
@@ -108,31 +107,61 @@ Lock::Lock(const char* debugName) {
 }
 Lock::~Lock() {
     delete queue;
-
 }
-
 void Lock::Acquire() {
+
     free = false;
 }
-
 void Lock::Release() {
+
+    // disable interrupts
+
+    // check if thread has lock ... isHeldByCurrentThread
+
+    // if not, do nothing
+
     free = true;
+
+    // if yes, release the lock and wakeup 1 of the waiting threads in queue
+
+    // enable interrupts
 }
 
-bool Lock::isHeldByCurrentThread(){
-
+bool Lock::isHeldByCurrentThread() {
+    return true;
 }
 
-#else
-Lock::Lock(const char* debugName) {}
-Lock::~Lock() {}
-void Lock::Acquire() {}
-void Lock::Release() {}
+Condition::Condition(const char* debugName) { 
+    name = debugName; // init
+    queue = new List;
+}
+Condition::~Condition() { 
+    delete queue;
+}
+void Condition::Wait(Lock* conditionLock) { 
+    // check if calling thread holds the lock
+    ASSERT(conditionLock->isHeldByCurrentThread()); 
 
-#endif
+    // release the lock
 
-Condition::Condition(const char* debugName) { }
-Condition::~Condition() { }
-void Condition::Wait(Lock* conditionLock) { ASSERT(FALSE); }
-void Condition::Signal(Lock* conditionLock) { }
-void Condition::Broadcast(Lock* conditionLock) { }
+    // put self in the queue of waiting threads
+
+    // re-acquire the lock
+}
+void Condition::Signal(Lock* conditionLock) { 
+
+    // check if calling thread holds the lock
+    ASSERT(conditionLock->isHeldByCurrentThread()); 
+
+    // dequeue one of the threads in the queue
+
+    // if thread exists, wake it up.
+}
+void Condition::Broadcast(Lock* conditionLock) { 
+
+    ASSERT(conditionLock->isHeldByCurrentThread()); 
+
+    // Dequeue all threads in the queue one-by-one
+
+    // Wakeup each thread
+}

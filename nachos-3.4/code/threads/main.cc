@@ -66,6 +66,7 @@ extern void ThreadTest(int n), Copy(char *unixFile, char *nachosFile);
 #else
 extern void ThreadTest(void), Copy(char *unixFile, char *nachosFile);
 #endif
+extern void Ping();
 extern void Print(char *file), PerformanceTest(void);
 extern void StartProcess(char *file), ConsoleTest(char *in, char *out);
 extern void MailTest(int networkID);
@@ -107,11 +108,14 @@ main(int argc, char **argv)
       }
     }
 
-	#ifdef HW1_SEMAPHORES
-	//Provide an integer argument for the HW1_SEMAPHORES
-	//version of the code:
-	int n = 4;
-	ThreadTest(n);
+	// #ifdef HW1_SEMAPHORES
+	// //Provide an integer argument for the HW1_SEMAPHORES
+	// //version of the code:
+	// int n = 4;
+	// ThreadTest(n);
+
+	#if defined(CHANGED) && defined(HW1_CONDITON)
+ 	Ping();
 
 	#else
     ThreadTest();

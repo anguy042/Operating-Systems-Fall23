@@ -81,10 +81,8 @@ class Lock {
     const char* name;				// for debugging
     // plus some other stuff you'll need to define
 
-    List *queue; 
-
+    List *queue;
     bool free;
-
 };
 
 // The following class defines a "condition variable".  A condition
@@ -124,7 +122,7 @@ class Condition {
     Condition(const char* debugName);		// initialize condition to 
 					// "no one waiting"
     ~Condition();			// deallocate the condition
-    char* getName() { return (name); }
+    const char* getName() { return (name); }
     
     void Wait(Lock *conditionLock); 	// these are the 3 operations on 
 					// condition variables; releasing the 
@@ -135,7 +133,9 @@ class Condition {
 					// these operations
 
   private:
-    char* name;
+    const char* name;
     // plus some other stuff you'll need to define
+    List *queue;       // threads waiting on the condition variable
+
 };
 #endif // SYNCH_H
