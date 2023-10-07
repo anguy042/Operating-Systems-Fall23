@@ -109,7 +109,6 @@ Lock::~Lock() {
     delete queue;
 }
 void Lock::Acquire() {
-
     free = false;
 }
 void Lock::Release() {
@@ -143,10 +142,14 @@ void Condition::Wait(Lock* conditionLock) {
     ASSERT(conditionLock->isHeldByCurrentThread()); 
 
     // release the lock
+    conditionLock.Release();
 
     // put self in the queue of waiting threads
+	queue->Append((void *)currentThread);	// so go to sleep
+	currentThread->Sleep();
 
     // re-acquire the lock
+    conditionLock.Acquire();
 }
 void Condition::Signal(Lock* conditionLock) { 
 
@@ -154,14 +157,20 @@ void Condition::Signal(Lock* conditionLock) {
     ASSERT(conditionLock->isHeldByCurrentThread()); 
 
     // dequeue one of the threads in the queue
+    Thread *thread;
+    thread = (Thread *)queue->Remove();
 
     // if thread exists, wake it up.
+    if (thread != NULL)	   // make thread ready, consuming the V immediately
+	    scheduler->ReadyToRun(thread);
 }
 void Condition::Broadcast(Lock* conditionLock) { 
 
     ASSERT(conditionLock->isHeldByCurrentThread()); 
 
     // Dequeue all threads in the queue one-by-one
-
+    Thread *thread;
+    while ((thread = (Thread *)queue->Remove(); == NULL)
     // Wakeup each thread
+    scheduler->ReadyToRun(thread);
 }
