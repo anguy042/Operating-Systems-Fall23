@@ -62,7 +62,7 @@ THREAD_C =../threads/main.cc\
 	../machine/sysdep.cc\
 	../machine/stats.cc\
 	../machine/timer.cc\
-	..threads/ping.cc
+	../threads/ping.cc
 
 THREAD_S = ../threads/switch.s
 
