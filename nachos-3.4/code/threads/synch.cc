@@ -142,14 +142,14 @@ void Condition::Wait(Lock* conditionLock) {
     ASSERT(conditionLock->isHeldByCurrentThread()); 
 
     // release the lock
-    conditionLock.Release();
+    conditionLock->Release();
 
     // put self in the queue of waiting threads
 	queue->Append((void *)currentThread);	// so go to sleep
 	currentThread->Sleep();
 
     // re-acquire the lock
-    conditionLock.Acquire();
+    conditionLock->Acquire();
 }
 void Condition::Signal(Lock* conditionLock) { 
 
@@ -170,7 +170,7 @@ void Condition::Broadcast(Lock* conditionLock) {
 
     // Dequeue all threads in the queue one-by-one
     Thread *thread;
-    while ((thread = (Thread *)queue->Remove(); == NULL)
+    while ((thread = (Thread *)queue->Remove() == NULL)
     // Wakeup each thread
     scheduler->ReadyToRun(thread);
 }
