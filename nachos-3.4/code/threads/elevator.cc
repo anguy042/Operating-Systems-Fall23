@@ -1,27 +1,54 @@
 #include "copyright.h"
 #include "system.h"
 #include "synch.h"
+#include "elevator.h"
 
 int nextPersonId = 1;
 Lock *personIdLock = new Lock("PersonIdLock");
 
-//Elevator *e = new Elevator(numFloors);
+ELEVATOR *e;
+
+void ELEVATOR::start() {
+    // Do the following steps A and B forever .... (not needed for this, all persons created at start)
+    while(1){
+
+    // A. wait until hailed
+
+    // B. While there are active persons, loop doing the following
+   //       0. Acquire elevatorLock
+    //      1. Signal persons inside elevator to get off (leaving->broadcast(elevatorLock))
+    //      2. persons atFloor to get in , one at time, checking ocupancyLimit each time
+    //      2.5 release elevatorLock
+    //      3. go to next floor 
+    //  print("Elevator arrives on floor %d.\n", )
+
+    }
+}
 
 
 void ElevatorThread(int numFloors){
     printf("Elevator function invoked! Elevator has %d floors.\n", numFloors);
 
+    e = new ELEVATOR(numFloors);
 
-    // Do the following steps A and B forever .... (not needed for this, all persons created at start)
+    e->start();
 
-    // A. wait until hailed
 
-    // B. While there are active persons, loop doing the following
-    //      1. Signal persons inside elevator to get off
-    //      2. persons atFloor to get in 
-    //      3. go to next floor 
-    //print("Elevator arrives on floor %d.\n", )
+}
 
+ELEVATOR::ELEVATOR(int numFloors){
+    entering = new Contiditon*(numFloors);
+    // initialize entering
+    
+    
+    for (int i = 0; i< numFloors; i++){
+        entering[i] = new Condition("Entering " + i);
+    }
+
+    personsWaiting = new int[numFloors];
+    elevatorLock = new Lock("ElevatorLock");
+
+    // initalize leaving
 
 }
 
@@ -31,14 +58,29 @@ void Elevator(int numFloors){
     //floors can get off if they need to.
     //Secondly, all the waiting floor can get on if they want to.
 
+
+
     //Create Elevator Thread
     Thread *t = new Thread("Elevator");
     t->Fork(ElevatorThread, numFloors);
 
 
-    
+}
 
-
+void ELEVATOR::hailElevator(Person *p){
+    // 1. increment waitng persons atFloor
+    // 2. hail Elevator
+    // 2.5 Acquire elevatorLock;
+    // 3. wait for the elevator to arrive atFloor [entering[p->atFloor]->wait(elevatorLock)]
+    // 5. get into elevator
+    print("Person %d got into the elevator. \n", p->id);
+    // 6. decrement persons waitng atFloor [personsWaiting[atFloor]++]
+    // 7. increment persons inside elevator [ocupancy++]
+    // 8. wait for elevator to reach the floor [leaving[p->toFloor]->wait(elevatorLock)]
+    // 9. get out of elevator
+    print("Person %d got out of the elevator. \n", p->id);
+    // 10. decrement persons inside elevator
+    // 11. Release elevatorLock;
 }
 
 //Fork() can only pass one integer as the second argument. 
@@ -48,18 +90,6 @@ void PersonThread(int person){
 
     printf("Person %d wants to go from floor %d to %d\n", p->id, p->atFloor, p->toFloor);
 
-    // 1. increment waitng persons atFloor
-    // 2. hail Elevator
-    // 3. wait for the elevator to arrive atFloor
-    // 4. Check if elevator occupancy limit is reached -- wait if it is
-    // 5. get into elevator
-    print("Person %d got into the elevator. \n", p->id);
-    // 6. decrement persons waitng atFloor 
-    // 7. increment persons inside elevator
-    // 8. wait for elevator to reach the floor
-    // 9. get out of elevator
-    print("Person %d got out of the elevator. \n", p->id);
-    // 10. decrement persons inside elevator
 }
 
 int getNextPersonID(){
