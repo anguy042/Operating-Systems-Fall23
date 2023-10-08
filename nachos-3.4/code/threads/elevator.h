@@ -3,6 +3,7 @@
 
 #include "copyright.h"
 
+
 void Elevator(int numFloors);
 void ArrivingGoingFromTo(int atFloor, int toFloor);
 
@@ -21,8 +22,8 @@ class ELEVATOR {
 
     private:
         int currentFloor;
-        Contiton **entering;
-        Contiton **leaving;
+        Conditon **entering;
+        Conditon **leaving;
         int *personsWaiting;
         int occupancy;
         int maxOccupancy;
