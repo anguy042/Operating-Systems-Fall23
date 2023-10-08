@@ -52,6 +52,8 @@
 
 #include "utility.h"
 #include "system.h"
+#include "elevator.h"
+
 
 #ifdef THREADS
 extern int testnum;
@@ -70,6 +72,7 @@ extern void Ping();
 extern void Print(char *file), PerformanceTest(void);
 extern void StartProcess(char *file), ConsoleTest(char *in, char *out);
 extern void MailTest(int networkID);
+
 
 //----------------------------------------------------------------------
 // main
@@ -108,20 +111,30 @@ main(int argc, char **argv)
       }
     }
 
+	#if !defined(HW1_SEMAPHORES) && !defined(HW1_LOCKS) && !defined(HW1_CONDITION) && !defined(HW1_ELEVATOR)
+	//Invoke original ThreadTest() if none of the directives for Proj 1 are given,
+	//allowing Nachos to be run as per usual.
+	ThreadTest();
+	#endif;
+
 	#if defined(HW1_SEMAPHORES) || defined(HW1_LOCKS)
 	//Provide an integer argument for the HW1_SEMAPHORES
-	//version of the code:
+	//and HW1_LOCKS demonstrations:
 	int n = 4;
 	ThreadTest(n);
-
-    #else
-    ThreadTest();
 	#endif
 
 
-	#if defined(CHANGED) && defined(HW1_CONDITON)
+	#if defined(CHANGED) && defined(HW1_CONDITION)
+	//Invoke Ping() if demonstrating HW1_CONDITION.
  	Ping();
 	#endif
+
+	#if defined(HW1_ELEVATOR)
+	//Invoke ElevatorTest() if demonstrating Elevator functions
+	ElevatorTest(5, 5);
+	#endif
+
 
 #endif //THREADS end
 

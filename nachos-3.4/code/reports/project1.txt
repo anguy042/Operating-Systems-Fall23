@@ -5,6 +5,9 @@ Kristy Hamlin
 Annie Nguyen
 Trang Trang
 
+Note to graders: We were not consistent in using the "CHANGED" flag for all changes. However, Nachos should still running
+in the default settings and run our tests as expected with the different flags specified for Project 1. 
+
 EXERCISE 1 NOTES
 
 After updating the code for SimpleThread() and testing values 0-4, I was originally confused by a couple things. Firstly, 
@@ -19,6 +22,8 @@ see increments of 1, but still see the same final value. I will implement the se
 
 After implementing the semaphores, I can see that now the threads each take turns incrementing the value by 1,
 and then they all see the same value at the end. Even when the -rs value is used the threads take turns out of order.
+
+EXCERCISE 4 NOTES
 
 
 

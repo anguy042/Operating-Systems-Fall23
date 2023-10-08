@@ -17,13 +17,15 @@
 #  excercise 2.
 # -DHW1_CONDITION is used to compile the code implemented for
 #  exercise 3.
+# -DHW1_ELEVATOR is used to compile the code implemented for
+#  exercise 4. 
 
 #NOTE: DHW1_SEMAPHORES and DHW1_LOCKS should not be used at the
 #      same time, or there will be multiple definitions for 
 #      some functions. 
 
 
-DEFINES = -DTHREADS -DHW1_LOCKS
+DEFINES = -DTHREADS -DHW1_ELEVATOR
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 
