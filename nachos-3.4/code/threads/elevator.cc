@@ -42,7 +42,7 @@ void ElevatorThread(int numFloors){
 
 ELEVATOR::ELEVATOR(int numFloors){
     currentFloor = 1;
-    entering = new Condition*(numFloors);
+    entering = new Condition*[numFloors];
     // initialize entering
     
     
