@@ -1,6 +1,8 @@
 #include "copyright.h"
 #include "system.h"
 
+int nextPersonId = 1;
+
 typedef struct Person {
     int id;
     int atFloor;
@@ -38,7 +40,7 @@ void PersonThread(int person){
 }
 
 int getNextPersonID(){
-    return 0;
+    return nextPersonId++;
 }
 
 void ArrivingGoingFromTo(int atFloor, int toFloor){
