@@ -15,7 +15,7 @@ typedef struct Person {
 } Person;
 
 class ELEVATOR {
-    
+
 public:
     ELEVATOR(int numFloors);
     ~ELEVATOR();

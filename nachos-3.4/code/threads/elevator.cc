@@ -42,7 +42,7 @@ void ElevatorThread(int numFloors){
 
 ELEVATOR::ELEVATOR(int numFloors){
     currentFloor = 1;
-    entering = new Contiditon*(numFloors);
+    entering = new Condition*(numFloors);
     // initialize entering
     
     
@@ -78,12 +78,12 @@ void ELEVATOR::hailElevator(Person *p){
     // 2.5 Acquire elevatorLock;
     // 3. wait for the elevator to arrive atFloor [entering[p->atFloor]->wait(elevatorLock)]
     // 5. get into elevator
-    print("Person %d got into the elevator. \n", p->id);
+    printf("Person %d got into the elevator. \n", p->id);
     // 6. decrement persons waitng atFloor [personsWaiting[atFloor]++]
     // 7. increment persons inside elevator [ocupancy++]
     // 8. wait for elevator to reach the floor [leaving[p->toFloor]->wait(elevatorLock)]
     // 9. get out of elevator
-    print("Person %d got out of the elevator. \n", p->id);
+    printf("Person %d got out of the elevator. \n", p->id);
     // 10. decrement persons inside elevator
     // 11. Release elevatorLock;
 }
