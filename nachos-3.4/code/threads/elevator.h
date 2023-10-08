@@ -22,8 +22,8 @@ class ELEVATOR {
 
     private:
         int currentFloor;
-        Conditon **entering;
-        Conditon **leaving;
+        Condition **entering;
+        Condition **leaving;
         int *personsWaiting;
         int occupancy;
         int maxOccupancy;
