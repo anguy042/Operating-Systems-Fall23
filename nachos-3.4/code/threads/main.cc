@@ -59,9 +59,9 @@ extern int testnum;
 
 // External functions used by this file
 
-#ifdef HW1_SEMAPHORES
-//We may be able to simply overload the ThreadTest() function, 
-//but I will use an ifdef here as well to be consistent:
+#if defined(HW1_SEMAPHORES) || defined(HW1_LOCKS)
+//The Semaphores and Locks demos for Exercises 1 and 2
+//require the following declaration for ThreadTest(int n):
 extern void ThreadTest(int n), Copy(char *unixFile, char *nachosFile);
 #else
 extern void ThreadTest(void), Copy(char *unixFile, char *nachosFile);
@@ -108,19 +108,22 @@ main(int argc, char **argv)
       }
     }
 
-	// #ifdef HW1_SEMAPHORES
-	// //Provide an integer argument for the HW1_SEMAPHORES
-	// //version of the code:
-	// int n = 4;
-	// ThreadTest(n);
+	#if defined(HW1_SEMAPHORES) || defined(HW1_LOCKS)
+	//Provide an integer argument for the HW1_SEMAPHORES
+	//version of the code:
+	int n = 4;
+	ThreadTest(n);
+
+    #else
+    ThreadTest();
+	#endif
+
 
 	#if defined(CHANGED) && defined(HW1_CONDITON)
  	Ping();
-
-	#else
-    ThreadTest();
 	#endif
-#endif
+
+#endif //THREADS end
 
     for (argc--, argv++; argc > 0; argc -= argCount, argv += argCount) {
 	argCount = 1;
