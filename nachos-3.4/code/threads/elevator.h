@@ -2,6 +2,7 @@
 #define ELEVATOR_H
 
 #include "copyright.h"
+#include "synch.h"
 
 
 void Elevator(int numFloors);
@@ -14,21 +15,22 @@ typedef struct Person {
 } Person;
 
 class ELEVATOR {
-    public:
-        ELEVATOR(int numFloors);
-        ~ELEVATOR();
-        void hailElevator(Person *p);
-        void start();
+    
+public:
+    ELEVATOR(int numFloors);
+    ~ELEVATOR();
+    void hailElevator(Person *p);
+    void start();
 
-    private:
-        int currentFloor;
-        Condition **entering;
-        Condition **leaving;
-        int *personsWaiting;
-        int occupancy;
-        int maxOccupancy;
-        Lock *elevatorLock;
-}
+private:
+    int currentFloor;
+    Condition **entering;
+    Condition **leaving;
+    int *personsWaiting;
+    int occupancy;
+    int maxOccupancy;
+    Lock *elevatorLock;
+};
 
 
 #endif
