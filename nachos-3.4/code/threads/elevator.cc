@@ -15,11 +15,15 @@ void ELEVATOR::start() {
     // A. wait until hailed
 
     // B. While there are active persons, loop doing the following
-   //       0. Acquire elevatorLock
+    //      0. Acquire elevatorLock
     //      1. Signal persons inside elevator to get off (leaving->broadcast(elevatorLock))
     //      2. persons atFloor to get in , one at time, checking ocupancyLimit each time
     //      2.5 release elevatorLock
-    //      3. go to next floor 
+    //      3. Spin for some time
+            for(int j =0 ; j< 1000000; j++) {
+                    currentThread->Yield();
+            }
+    //      4. go to next floor (update corrent floor)
     //  print("Elevator arrives on floor %d.\n", )
 
     }
@@ -37,6 +41,7 @@ void ElevatorThread(int numFloors){
 }
 
 ELEVATOR::ELEVATOR(int numFloors){
+    currentFloor = 1;
     entering = new Contiditon*(numFloors);
     // initialize entering
     
