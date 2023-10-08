@@ -72,6 +72,7 @@ extern void Ping();
 extern void Print(char *file), PerformanceTest(void);
 extern void StartProcess(char *file), ConsoleTest(char *in, char *out);
 extern void MailTest(int networkID);
+extern void ElevatorTest(int numFloors, int numPersons);
 
 
 //----------------------------------------------------------------------
@@ -115,7 +116,7 @@ main(int argc, char **argv)
 	//Invoke original ThreadTest() if none of the directives for Proj 1 are given,
 	//allowing Nachos to be run as per usual.
 	ThreadTest();
-	#endif;
+	#endif
 
 	#if defined(HW1_SEMAPHORES) || defined(HW1_LOCKS)
 	//Provide an integer argument for the HW1_SEMAPHORES

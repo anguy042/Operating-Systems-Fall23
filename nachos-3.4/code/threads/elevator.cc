@@ -4,7 +4,7 @@
 
 void Elevator(int numFloors){
 
-printf("Elevator function invoked!\n");
+printf("Elevator function invoked! Elevator has %d floors.\n", numFloors);
 
 
 }
