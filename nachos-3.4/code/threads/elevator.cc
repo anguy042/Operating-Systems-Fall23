@@ -1,17 +1,28 @@
 #include "copyright.h"
 #include "system.h"
+#include "synch.h"
 
 int nextPersonId = 1;
+Lock *personIdLock = new Lock("PersonIdLock");
 
-typedef struct Person {
-    int id;
-    int atFloor;
-    int toFloor;
-} Person;
+//Elevator *e = new Elevator(numFloors);
 
 
 void ElevatorThread(int numFloors){
     printf("Elevator function invoked! Elevator has %d floors.\n", numFloors);
+
+
+    // Do the following steps A and B forever .... (not needed for this, all persons created at start)
+
+    // A. wait until hailed
+
+    // B. While there are active persons, loop doing the following
+    //      1. Signal persons inside elevator to get off
+    //      2. persons atFloor to get in 
+    //      3. go to next floor 
+    //print("Elevator arrives on floor %d.\n", )
+
+
 }
 
 void Elevator(int numFloors){
@@ -37,16 +48,31 @@ void PersonThread(int person){
 
     printf("Person %d wants to go from floor %d to %d\n", p->id, p->atFloor, p->toFloor);
 
+    // 1. increment waitng persons atFloor
+    // 2. hail Elevator
+    // 3. wait for the elevator to arrive atFloor
+    // 4. Check if elevator occupancy limit is reached -- wait if it is
+    // 5. get into elevator
+    print("Person %d got into the elevator. \n", p->id);
+    // 6. decrement persons waitng atFloor 
+    // 7. increment persons inside elevator
+    // 8. wait for elevator to reach the floor
+    // 9. get out of elevator
+    print("Person %d got out of the elevator. \n", p->id);
+    // 10. decrement persons inside elevator
 }
 
 int getNextPersonID(){
-    return nextPersonId++;
+    int personId = nextPersonId;
+    personIdLock->Acquire();
+    nextPersonId = nextPersonId + 1;
+    personIdLock->Release();
+    return personId;
 }
 
 void ArrivingGoingFromTo(int atFloor, int toFloor){
 
    
-    
     //Create Person struct:
     Person *p = new Person;
     p->id = getNextPersonID();
