@@ -153,13 +153,17 @@ void Lock::Release()
 
     // If yes, release the lock and wakeup 1 of the waiting threads in queue
     //remove from queue and wake up
-    if (!queue->IsEmpty())
+    else
     {
 
-        Thread *thread = (void *)queue->Remove();
-        if (thread != NULL) //make thread ready
+        if (!queue->IsEmpty())
         {
-            scheduler->ReadyToRun(thread);
+
+            Thread *thread = static_cast<Thread *>(queue->Remove());
+            if (thread != NULL) //make thread ready
+            {
+                scheduler->ReadyToRun(thread);
+            }
         }
     }
 
