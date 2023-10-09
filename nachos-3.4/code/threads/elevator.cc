@@ -3,7 +3,7 @@
 #include "synch.h"
 #include "elevator.h"
 
-int nextPersonId = 1;
+
 Lock *personIdLock = new Lock("PersonIdLock");
 
 //We will implement the elevator problem using global variables
@@ -13,9 +13,11 @@ Lock *personIdLock = new Lock("PersonIdLock");
 int currElevatorFloor = 1;
 Semaphore *mutexFloor = new Semaphore("Elevator floor mutext semaphore", 1);
 
-int currElevatorPeople = 0;
-Semaphore *mutexPeople = new Semaphore("Semaphore for mutex on elevator capacity", 1);
+int occupancy = 0;
+Semaphore *mutexOccupancy = new Semaphore("Semaphore for mutex on elevator capacity", 1);
 
+int nextPersonId = 1;
+Semaphore *mutexPersonID = new Semaphore("Semaphore for person ID", 1);
 
 ELEVATOR *e;
 
@@ -57,7 +59,7 @@ void ELEVATOR::start(int numFloors)
 
             //Exit section------------
             mutexFloor->V();
-            printf("Semaphore signaled!\n");
+            //printf("Semaphore signaled!\n");
 
             //Yield so people threads can run:
             currentThread->Yield();          
@@ -182,18 +184,69 @@ void ELEVATOR::hailElevator(Person *p)
 //Fork() can only pass one integer as the second argument.
 void PersonThread(int person)
 {
+    printf("Starting person thread!\n");
 
     Person *p = (Person *)person;
 
     printf("Person %d wants to go from floor %d to %d\n", p->id, p->atFloor, p->toFloor);
+
+    bool waiting = true;
+    bool isOnElevator = false;
+    bool arrived = false;
+
+    while(waiting){
+        //Continuously check what floor the elevator is on.
+        if(currElevatorFloor == p->atFloor){
+            //Check if elevator is at capacity or not:
+            if(occupancy <= 5){
+                //get on the elevator.
+                printf("Person %d got into the elevator.\n", p->id);
+
+                //increment occupancy:
+                mutexOccupancy->P();
+                occupancy = occupancy + 1;
+                mutexOccupancy->V();
+
+                waiting = false;
+                isOnElevator = true;
+
+            }
+           
+            
+        }
+
+        currentThread->Yield();
+    }//on elevator
+
+    while(isOnElevator){
+        //Continuously check what floor the elevator is on.
+        if(currElevatorFloor == p->toFloor){
+            //no need to check occupancy before getting off:
+             printf("Person %d got out of the elevator.\n", p->id);
+
+                //decrement occupancy:
+                mutexOccupancy->P();
+                occupancy = occupancy - 1;
+                mutexOccupancy->V();
+
+                isOnElevator = false;
+                arrived = true; //I didn't use this but I like having it.
+        }
+
+        currentThread->Yield();
+
+    }
+
+
 }
 
 int getNextPersonID()
 {
     int personId = nextPersonId;
-    personIdLock->Acquire();
+    
+    mutexPersonID->P();
     nextPersonId = nextPersonId + 1;
-    personIdLock->Release();
+    mutexPersonID->V();
     return personId;
 }
 

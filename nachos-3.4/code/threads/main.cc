@@ -134,7 +134,8 @@ main(int argc, char **argv)
 	#if defined(HW1_ELEVATOR)
 	//Invoke ElevatorTest() if demonstrating Elevator functions
 	//ElevatorTest(5, 5);
-	Elevator(5);
+	Elevator(101);
+	ArrivingGoingFromTo(3, 100);
 	#endif
 
 
