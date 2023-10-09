@@ -6,54 +6,104 @@
 int nextPersonId = 1;
 Lock *personIdLock = new Lock("PersonIdLock");
 
+//We will implement the elevator problem using global variables
+//and semaphores to protect the global variables.
+
+//Global Variables and Semaphores:
+int currElevatorFloor = 1;
+Semaphore *mutexFloor = new Semaphore("Elevator floor mutext semaphore", 1);
+
+int currElevatorPeople = 0;
+Semaphore *mutexPeople = new Semaphore("Semaphore for mutex on elevator capacity", 1);
+
+
 ELEVATOR *e;
 
-void ELEVATOR::start()
+void ELEVATOR::start(int numFloors)
 {
+    printf("Starting Elevator!\n");
+    //This will keep track of if the elevator is going up or down.
+    //Since the elevator presumably starts on floor 1 and can only  go up,
+    //we will initialize it to true. 
+    bool up = true; 
     // Do the following steps A and B forever .... (not needed for this, all persons created at start)
     while (1)
     {
-
-        // A. wait until hailed
-
-        // B. While there are active persons, loop doing the following
-        while (occupancy > 0)
-        {
-            //assuming there must be atleast 1 person in the elevator
-
-            //      0. Acquire elevatorLock
-            elevatorLock->Acquire();
-
-            //      1. Signal persons inside elevator to get off (leaving->broadcast(elevatorLock))
-            leaving[currentFloor]->Broadcast(elevatorLock);
-            //at the currentFloor a signal will be broadcasted
-
-            //      2. persons atFloor to get in , one at time, checking ocupancyLimit each time
-
-            //      2.5 release elevatorLock
-            elevatorLock->Release();
-
+        //printf("Entering eternal while loop!\n");
+        //I will start by having the elevator always running and then see if we can implement 
+        //a way to call it.
+        if(up){
+            //printf("Elevator is going up!\n");
+            //Elevator goes up one floor:
             //      3. Spin for some time
             for (int j = 0; j < 1000000; j++)
             {
                 currentThread->Yield();
             }
-            //      4. go to next floor (update corrent floor)
-            currentFloor = (currentFloor + 1) % ;
 
-            //  print("Elevator arrives on floor %d.\n", )
-            printf("Elevator arrives on floor %d.\n", currentFloor);
+            //Entry section----------
+            //Call P() before incrementing floor number:
+            mutexFloor->P();
+            //printf("Semaphore signaled! Incrementing floor number!\n");
+            currElevatorFloor = currElevatorFloor + 1;
+            
+            printf("Elevator arrives on floor %d\n", currElevatorFloor);
+            
+            //before calling V(), check if it is time to go down.
+            if(currElevatorFloor == numFloors){
+                //printf("Time to go down!\n");
+                up = false;
+            }
+
+            //Exit section------------
+            mutexFloor->V();
+            printf("Semaphore signaled!\n");
+
+            //Yield so people threads can run:
+            currentThread->Yield();          
+
+        }else{
+            //If elevator is going down, a similar procedure:
+    
+            //      3. Spin for some time
+            for (int j = 0; j < 1000000; j++)
+            {
+                currentThread->Yield();
+            }
+
+            //Entry section----------
+            //Call P() before decrementing floor number:
+            mutexFloor->P();
+            currElevatorFloor = currElevatorFloor - 1;
+            
+            printf("Elevator arrives on floor %d\n", currElevatorFloor);
+            
+            //before calling V(), check if it is time to go up.
+            if(currElevatorFloor == 1){
+                up = true;
+            }
+
+            //Exit section------------
+            mutexFloor->V();
+
+            //Yield so people threads can run:
+            currentThread->Yield();          
+
         }
-    }
-}
+
+    }//while(1)
+    
+}//Start()
 
 void ElevatorThread(int numFloors)
 {
     printf("Elevator function invoked! Elevator has %d floors.\n", numFloors);
-
+    
+    
     e = new ELEVATOR(numFloors);
+   
 
-    e->start();
+    e->start(numFloors);
 }
 
 ELEVATOR::ELEVATOR(int numFloors)

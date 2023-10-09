@@ -20,7 +20,7 @@ public:
     ELEVATOR(int numFloors);
     ~ELEVATOR();
     void hailElevator(Person *p);
-    void start();
+    void start(int numFloors);
 
 private:
     int currentFloor;
