@@ -114,16 +114,24 @@ Lock::~Lock()
 void Lock::Acquire()
 {
 
-    // Disable interrupts
+    // Disable interrupts similar to semaphore P()
     IntStatus oldLevel = interrupt->SetLevel(IntOff);
 
-    while (!free)
+    //check IF lock is free
+    if (free)
     {
+        //make the lock not free anymore if yes
+        free = false;
+    }
+
+    // Else, lock is not free -- add self to queue
+    // (keep checking for free lock while)
+    else
+    {
+        //if its not free, add(append) the current thread to the queue
         queue->Append((void *)currentThread);
         currentThread->Sleep();
     }
-
-    free = false;
 
     // Enable interrupts
     (void)interrupt->SetLevel(oldLevel);
@@ -134,22 +142,27 @@ void Lock::Release()
 
     // Disable interrupts
     IntStatus oldLevel = interrupt->SetLevel(IntOff);
-    if (!isHeldByCurrentThread())
+
+    // check if thread has lock ... isHeldByCurrentThread
+    if (isHeldByCurrentThread())
     {
-        // check if thread has lock ... isHeldByCurrentThread ?
+        free = true;
 
         // If not, do nothing
     }
-    else
+
+    // If yes, release the lock and wakeup 1 of the waiting threads in queue
+    //remove from queue and wake up
+    if (!queue->IsEmpty())
     {
-        free = true;
-        //  // If yes, release the lock and wakeup 1 of the waiting threads in queue
-        Thread *thread = (Thread *)queue->Remove();
-        if (thread != NULL)
+
+        Thread *thread = (void *)queue->Remove();
+        if (thread != NULL) //make thread ready
         {
             scheduler->ReadyToRun(thread);
         }
     }
+
     // Enable interrupts
     (void)interrupt->SetLevel(oldLevel);
 }
