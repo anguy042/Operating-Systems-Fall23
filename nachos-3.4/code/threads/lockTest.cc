@@ -36,6 +36,7 @@ void LockT(int number)
 
 void LockTest()
 {
+    printf("Starting lock test")
 	for (int i = 1; i<=3; i++)
 	{
     		Thread *Testt = new Thread("forked thread");
