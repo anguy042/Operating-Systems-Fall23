@@ -66,7 +66,7 @@ ELEVATOR::ELEVATOR(int numFloors)
 {
     maxFloor = numFloors;
     currentFloor = 1;
-    entering = new Condition *[numFloors];
+    entering = new Condition *[numFloors+1];
     // initialize entering
 
     for (int i = 0; i < numFloors; i++)
@@ -78,7 +78,7 @@ ELEVATOR::ELEVATOR(int numFloors)
     elevatorLock = new Lock("ElevatorLock");
 
     // initalize leaving
-    leaving = new Condition *[numFloors];
+    leaving = new Condition *[numFloors+1];
 
 }
 
