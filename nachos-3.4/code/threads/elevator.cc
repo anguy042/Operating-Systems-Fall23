@@ -143,8 +143,8 @@ void PersonThread(int person)
     Person *p = (Person *)person;
 
     printf("Person %d wants to go from floor %d to %d\n", p->id, p->atFloor, p->toFloor);
-    
-    e.hailElevator(p);
+
+    e->hailElevator(p);
 }
 
 int getNextPersonID()
