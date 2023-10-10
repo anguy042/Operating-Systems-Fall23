@@ -109,6 +109,8 @@ Lock::~Lock() {
     delete queue;
 }
 void Lock::Acquire() {
+
+	printf("test this is running%d",1);
     // Disable interrupts
     IntStatus oldLevel = interrupt->SetLevel(IntOff);	// disable interrupts
 

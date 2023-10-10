@@ -115,11 +115,9 @@ main(int argc, char **argv)
 	// ThreadTest(n);
 
 	#if defined(CHANGED) && defined(HW1_CONDITON)
-	printf("test this is running%d",1);
  	Ping();
 
 	#else
-	printf("or is this one test this is running%d",1);
     ThreadTest();
 	#endif
 #endif
