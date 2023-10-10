@@ -123,7 +123,7 @@ void Lock::Acquire() {
     // if yes, make the lock not free anymore
     free = false;
 
-	printf("Acquired%d",1);
+	printf("Acquired %d\n",1);
 
     // enable interrupts
     (void) interrupt->SetLevel(oldLevel);
@@ -140,6 +140,7 @@ void Lock::Release() {
         queue->Append((void *)currentThread);	// so go to sleep
         currentThread->Sleep();
     } 
+	printf("Release %d\n",2);
      
     // if yes, release the lock and wakeup 1 of the waiting threads in queue
     free = true;
@@ -167,14 +168,13 @@ Condition::~Condition() {
 void Condition::Wait(Lock* conditionLock) { 
     IntStatus oldLevel = interrupt->SetLevel(IntOff);	// disable interrupts
     // check if calling thread holds the lock
-	printf("Wait %d",1);
     ASSERT(conditionLock->isHeldByCurrentThread()); 
     // while (!conditionLock->isHeldByCurrentThread()) { 			// lock not available
     //     queue->Append((void *)currentThread);	// so go to sleep
     //     currentThread->Sleep();
     // } 
 
-	printf("Wait %d",2);
+	printf("Wait %d\n",1);
     // release the lock
     conditionLock->Release();
 
@@ -188,10 +188,9 @@ void Condition::Wait(Lock* conditionLock) {
 }
 void Condition::Signal(Lock* conditionLock) { 
 
-	printf("Signal %d",1);
     // check if calling thread holds the lock
     ASSERT(conditionLock->isHeldByCurrentThread()); 
-	printf("Signal %d",2);
+	printf("Signal %d\n",2);
 
     // dequeue one of the threads in the queue
     Thread *thread;
