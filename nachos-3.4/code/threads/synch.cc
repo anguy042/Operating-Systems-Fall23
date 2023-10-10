@@ -135,6 +135,7 @@ void Lock::Release() {
 
     // check if thread has lock ... isHeldByCurrentThread
     // if not, do nothing
+	printf("Release %d\n",1);
     
     while (isHeldByCurrentThread()) { 			// lock not available
         queue->Append((void *)currentThread);	// so go to sleep
@@ -190,7 +191,7 @@ void Condition::Signal(Lock* conditionLock) {
 
     // check if calling thread holds the lock
     ASSERT(conditionLock->isHeldByCurrentThread()); 
-	printf("Signal %d\n",2);
+	printf("Signal %d\n",1);
 
     // dequeue one of the threads in the queue
     Thread *thread;
