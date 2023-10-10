@@ -23,14 +23,13 @@ void ELEVATOR::start()
         while (anyPersonWaiting > 0)
         {
             //assuming there must be atleast 1 person in the elevator
-            printf("Elevator arrives on floor %d and try to acquire lock.\n", currentFloor);
 
             //      0. Acquire elevatorLock
             elevatorLock->Acquire();
-            printf("Elevator arrives on floor %d and got lock.\n", currentFloor);
 
             //      1. Signal persons inside elevator to get off (leaving->broadcast(elevatorLock))
             leaving[currentFloor]->Broadcast(elevatorLock);
+            
             //at the currentFloor a signal will be broadcasted
             printf("Elevator arrives on floor %d and broadcast.\n", currentFloor);
 
