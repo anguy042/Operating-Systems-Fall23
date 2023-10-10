@@ -23,7 +23,23 @@ see increments of 1, but still see the same final value. I will implement the se
 After implementing the semaphores, I can see that now the threads each take turns incrementing the value by 1,
 and then they all see the same value at the end. Even when the -rs value is used the threads take turns out of order.
 
+
+
 EXCERCISE 4 NOTES
 
+We decided to implement the Elevator problem using semaphores and global variables rather than condition variables.
+Our group was having trouble implementing the locks, but had the semaphores working. Therefore, our solution to the
+elevator problem uses semaphores that control access to global variables that keep track of the current floor
+of the elevator, number of people waiting, etc. 
+
+The only requirement our implementation does not currently fulfill is the requirement that the elevator can restart
+once it is stopped. Our implementation has a switch that turns off once all people have been served, but once off
+there is no code to call start(int numFloors) again from the elevator thread side. I assume that all people
+will be created at the beginning of the test and hope that this is not a large shortcoming. We could have allowed
+the elevator to cycle forever which would be an easy solution, but we thought it would be nice for the TAs 
+to not have to deal with eternal prints to the console. :) 
+
+The code contains comments that should help you to read and understand what is going on. The elevator demo
+works using teh ElevatorTest.cc code. 
 
 

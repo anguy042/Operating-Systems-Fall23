@@ -3,9 +3,6 @@
 #include "synch.h"
 #include "elevator.h"
 
-
-Lock *personIdLock = new Lock("PersonIdLock");
-
 //We will implement the elevator problem using global variables
 //and semaphores to protect the global variables.
 
@@ -19,17 +16,32 @@ Semaphore *mutexOccupancy = new Semaphore("Semaphore for mutex on elevator capac
 int nextPersonId = 1;
 Semaphore *mutexPersonID = new Semaphore("Semaphore for person ID", 1);
 
+//I want to implement the elevator to at least stop at the end of the demo
+//instead of cycling forever.
+//Therefore I will use a counter for the number of people waiting and
+//a switch to turn the elevator off at the end. 
+int numPeopleWaiting = 0;
+Semaphore *mutexNumPeople = new Semaphore("Semaphore controls num of people", 1);
+
+bool elevatorOn = 1; //initialize to true.
+Semaphore *mutexElevatorSwitch = new Semaphore("Semaphore controls elevator off switch", 1);
+
 ELEVATOR *e;
 
 void ELEVATOR::start(int numFloors)
 {
-    printf("Starting Elevator!\n");
-    //This will keep track of if the elevator is going up or down.
+    //printf("Starting Elevator!\n");
+    //This boolean will keep track of if the elevator is going up or down.
     //Since the elevator presumably starts on floor 1 and can only  go up,
     //we will initialize it to true. 
     bool up = true; 
-    // Do the following steps A and B forever .... (not needed for this, all persons created at start)
-    while (1)
+
+    
+    //The elevator will simply ascend and descend floors when called
+    //and take people where they want to go.
+    //However, with the global boolean it should be able to stop
+    //when occupancy reaches 0 and start when called.
+    while (elevatorOn)
     {
         //printf("Entering eternal while loop!\n");
         //I will start by having the elevator always running and then see if we can implement 
@@ -93,7 +105,7 @@ void ELEVATOR::start(int numFloors)
 
         }
 
-    }//while(1)
+    }//while(elevatorOn)
     
 }//Start()
 
@@ -101,37 +113,19 @@ void ElevatorThread(int numFloors)
 {
     printf("Elevator function invoked! Elevator has %d floors.\n", numFloors);
     
-    
     e = new ELEVATOR(numFloors);
-   
 
     e->start(numFloors);
 }
 
 ELEVATOR::ELEVATOR(int numFloors)
 {
-    currentFloor = 1;
-    entering = new Condition *[numFloors];
-    // initialize entering
-
-    for (int i = 0; i < numFloors; i++)
-    {
-        entering[i] = new Condition("Entering " + i);
-    }
-
-    personsWaiting = new int[numFloors];
-    elevatorLock = new Lock("ElevatorLock");
-
-    // initalize leaving
+   //Did not use this function 
+   //for semaphore implementation
 }
 
 void Elevator(int numFloors)
 {
-    //Every time the elevator reaches a new floor, it needs to do two things.
-    //First, it needs to tell all the threads what floor it is at so all the
-    //floors can get off if they need to.
-    //Secondly, all the waiting floor can get on if they want to.
-
     //Create Elevator Thread
     Thread *t = new Thread("Elevator");
     t->Fork(ElevatorThread, numFloors);
@@ -139,56 +133,26 @@ void Elevator(int numFloors)
 
 void ELEVATOR::hailElevator(Person *p)
 {
-    // 1. increment waitng persons atFloor
-    personsWaiting[p->atFloor]++;
-
-    // 2. hail Elevator
-    // 2.5 Acquire elevatorLock;
-    elevatorLock->Acquire();
-
-    // 3. wait for the elevator to arrive atFloor [entering[p->atFloor]->wait(elevatorLock)]
-    while (currentFloor != p->atFloor)
-    {
-        entering[p->atFloor]->Wait(elevatorLock);
-    }
-    //while were on the currentFloor it will note what floor the person is entering at
-
-    // 5. get into elevator
-    printf("Person %d got into the elevator. \n", p->id);
-
-    // 6. decrement persons waitng atFloor [personsWaiting[atFloor]++]
-    personsWaiting[p->atFloor]--;
-    //subtracting the # of people waiting
-
-    // 7. increment persons inside elevator [ocupancy++]
-    occupancy++;
-    //adding occupants
-
-    // 8. wait for elevator to reach the floor [leaving[p->toFloor]->wait(elevatorLock)]
-    while (currentFloor != p->toFloor)
-    {
-        leaving[p->toFloor]->Wait(elevatorLock);
-    }
-
-    // 9. get out of elevator
-    printf("Person %d got out of the elevator. \n", p->id);
-
-    // 10. decrement persons inside elevator
-    occupancy--;
-    //subtracting occupants
-
-    // 11. Release elevatorLock;
-    elevatorLock->Release();
+   //did not use this method for the semaphores
+   //implementation. 
 }
 
 //Fork() can only pass one integer as the second argument.
 void PersonThread(int person)
 {
-    printf("Starting person thread!\n");
+    //printf("Starting person thread!\n");
 
     Person *p = (Person *)person;
 
-    printf("Person %d wants to go from floor %d to %d\n", p->id, p->atFloor, p->toFloor);
+    printf("Person %d wants to go to floor %d from %d\n", p->id, p->toFloor, p->atFloor);
+
+    //Increment global counter for number of people waiting for elevator:
+    //Whenever this function is called, we want the elevator to be turned on:
+    mutexNumPeople->P();
+    numPeopleWaiting = numPeopleWaiting + 1;
+    mutexNumPeople->V();
+    currentThread->Yield();
+
 
     bool waiting = true;
     bool isOnElevator = false;
@@ -198,23 +162,31 @@ void PersonThread(int person)
         //Continuously check what floor the elevator is on.
         if(currElevatorFloor == p->atFloor){
             //Check if elevator is at capacity or not:
-            if(occupancy <= 5){
+            if(occupancy < 5){
                 //get on the elevator.
                 printf("Person %d got into the elevator.\n", p->id);
-
+                
                 //increment occupancy:
                 mutexOccupancy->P();
                 occupancy = occupancy + 1;
                 mutexOccupancy->V();
 
+                //used for testing:
+                //printf("The occupancy is now %d\n", occupancy);
+
                 waiting = false;
                 isOnElevator = true;
 
+            }else{
+                //for testing
+                //printf("Oh no! The elevator is full and person %d needs to wait.\n", p->id);
+                currentThread->Yield();
             }
-           
+           //Making sure other threads get to run while inside this loop
+           currentThread->Yield();
             
         }
-
+        //etc
         currentThread->Yield();
     }//on elevator
 
@@ -231,12 +203,26 @@ void PersonThread(int person)
 
                 isOnElevator = false;
                 arrived = true; //I didn't use this but I like having it.
+
+                //decrement line of people waiting for elevator:
+                mutexNumPeople->P();
+                numPeopleWaiting = numPeopleWaiting - 1;
+                mutexNumPeople->V();
+
+                //Check if last person has been served:
+                if(numPeopleWaiting == 0){
+                    mutexElevatorSwitch->P();
+                    elevatorOn = false;
+                    mutexElevatorSwitch->V();
+                }
+                
+                //Elevator should now stop at the end of the demo
+                //instead of cycling forever. 
+
+
         }
-
         currentThread->Yield();
-
     }
-
 
 }
 
