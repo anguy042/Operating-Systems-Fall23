@@ -199,9 +199,11 @@ void Condition::Broadcast(Lock* conditionLock) {
 
     // Dequeue all threads in the queue one-by-one
     Thread *thread;
-    while ((thread = (Thread *)queue->Remove()) != NULL)
+    while ((thread = (Thread *)queue->Remove()) != NULL){
         // Wakeup each thread
+        printf("did we got here?\n");
         scheduler->ReadyToRun(thread);
+    }
 
     (void) interrupt->SetLevel(oldLevel);	// re-enable interrupts
 }
