@@ -52,7 +52,7 @@ void ELEVATOR::start()
             printf("Elevator leaving floor %d.\n", currentFloor);
 
             //      4. go to next floor (update corrent floor)
-            currentFloor = (currentFloor % (maxFloor+1)) + 1;
+            currentFloor = (currentFloor % (maxFloor)) + 1;
         }
 
     }
