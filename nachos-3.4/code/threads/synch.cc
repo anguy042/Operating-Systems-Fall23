@@ -174,5 +174,6 @@ void Condition::Broadcast(Lock* conditionLock) {
     Thread *thread;
     while ((thread = (Thread *)queue->Remove()) == NULL)
         // Wakeup each thread
+        printf("ready to run%d", 1);
         scheduler->ReadyToRun(thread);
 }
