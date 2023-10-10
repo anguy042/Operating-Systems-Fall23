@@ -157,6 +157,8 @@ void ArrivingGoingFromTo(int atFloor, int toFloor)
     p->atFloor = atFloor;
     p->toFloor = toFloor;
 
+    printf("Person %d wants to go from floor %d to %d created.\n", p->id, p->atFloor, p->toFloor);
+
     //Create Person thread
     Thread *t = new Thread("Person " + p->id);
     t->Fork(PersonThread, (int)p);
