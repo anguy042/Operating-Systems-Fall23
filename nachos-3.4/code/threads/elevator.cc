@@ -47,11 +47,12 @@ void ELEVATOR::start()
             {
                 currentThread->Yield();
             }
-            //      4. go to next floor (update corrent floor)
-            currentFloor = (currentFloor % (maxFloor+1)) + 1;
 
             //  print("Elevator arrives on floor %d.\n", )
             printf("Elevator leaving floor %d.\n", currentFloor);
+
+            //      4. go to next floor (update corrent floor)
+            currentFloor = (currentFloor % (maxFloor+1)) + 1;
         }
 
     }

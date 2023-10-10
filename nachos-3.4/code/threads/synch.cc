@@ -195,13 +195,16 @@ void Condition::Signal(Lock* conditionLock) {
 void Condition::Broadcast(Lock* conditionLock) { 
 
     IntStatus oldLevel = interrupt->SetLevel(IntOff);	// disable interrupts
-    //ASSERT(conditionLock->isHeldByCurrentThread()); 
+    printf("did we got here?\n");
+    ASSERT(conditionLock->isHeldByCurrentThread()); 
+    printf("did we got here as well?\n");
 
     // Dequeue all threads in the queue one-by-one
     Thread *thread;
     while ((thread = (Thread *)queue->Remove()) == NULL)
+    printf("did we got here as well 2?\n");
         // Wakeup each thread
         scheduler->ReadyToRun(thread);
-        
+
     (void) interrupt->SetLevel(oldLevel);	// re-enable interrupts
 }
