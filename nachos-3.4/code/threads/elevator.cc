@@ -70,7 +70,7 @@ ELEVATOR::ELEVATOR(int numFloors)
     entering = new Condition *[numFloors+1];
     // initialize entering
 
-    for (int i = 0; i < numFloors; i++)
+    for (int i = 0; i <= numFloors; i++)
     {
         entering[i] = new Condition("Entering " + i);
     }
@@ -80,6 +80,11 @@ ELEVATOR::ELEVATOR(int numFloors)
 
     // initalize leaving
     leaving = new Condition *[numFloors+1];
+
+    for (int i = 0; i <= numFloors; i++)
+    {
+        leaving[i] = new Condition("Leaving " + i);
+    }
 
 }
 
