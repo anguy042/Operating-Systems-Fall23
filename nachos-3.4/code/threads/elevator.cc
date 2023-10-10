@@ -30,6 +30,7 @@ void ELEVATOR::start()
             //      1. Signal persons inside elevator to get off (leaving->broadcast(elevatorLock))
             leaving[currentFloor]->Broadcast(elevatorLock);
             //at the currentFloor a signal will be broadcasted
+            printf("Elevator arrives on floor %d and broadcast.\n", currentFloor);
 
             //      2. persons atFloor to get in , one at time, checking ocupancyLimit each time
 
@@ -45,7 +46,7 @@ void ELEVATOR::start()
             currentFloor = (currentFloor % (maxFloor+1)) + 1;
 
             //  print("Elevator arrives on floor %d.\n", )
-            printf("Elevator arrives on floor %d.\n", currentFloor);
+            printf("Elevator leaving floor %d.\n", currentFloor);
         }
 
     }
@@ -100,8 +101,6 @@ void ELEVATOR::hailElevator(Person *p)
     // 2. hail Elevator
     // 2.5 Acquire elevatorLock;
     elevatorLock->Acquire();
-
-    printf("Person %d got lock?. \n", p->id);
 
     // 3. wait for the elevator to arrive atFloor [entering[p->atFloor]->wait(elevatorLock)]
     while (currentFloor != p->atFloor)
