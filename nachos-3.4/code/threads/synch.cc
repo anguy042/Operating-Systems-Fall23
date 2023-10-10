@@ -92,7 +92,7 @@ Semaphore::V()
 
     thread = (Thread *)queue->Remove();
     if (thread != NULL)	   // make thread ready, consuming the V immediately
-	scheduler->ReadyToRun(thread);
+	    scheduler->ReadyToRun(thread);
     value++;
     (void) interrupt->SetLevel(oldLevel);
 }
@@ -199,10 +199,13 @@ void Condition::Broadcast(Lock* conditionLock) {
 
     // Dequeue all threads in the queue one-by-one
     Thread *thread;
-    while ((thread = (Thread *)queue->Remove()) != NULL){
+    thread = (Thread *)queue->Remove();
+    printf("did we got here?\n");
+    while (thread != NULL){
         // Wakeup each thread
-        printf("did we got here?\n");
+        printf("did we got here as well??\n");
         scheduler->ReadyToRun(thread);
+        thread = (Thread *)queue->Remove();
     }
 
     (void) interrupt->SetLevel(oldLevel);	// re-enable interrupts
