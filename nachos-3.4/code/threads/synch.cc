@@ -109,25 +109,49 @@ Lock::~Lock() {
     delete queue;
 }
 void Lock::Acquire() {
+    // Disable interrupts
+    IntStatus oldLevel = interrupt->SetLevel(IntOff);	// disable interrupts
+
+    // check if lock is free
+    // else lock is not free -- add self to queue 
+    while (conditionLock->isHeldByCurrentThread()) { 			// lock not available
+        queue->Append((void *)currentThread);	// so go to sleep
+        currentThread->Sleep();
+    } 
+
+    // if yes, make the lock not free anymore
     free = false;
+
+
+    // enable interrupts
+    (void) interrupt->SetLevel(oldLevel);
 }
 void Lock::Release() {
 
     // disable interrupts
+    IntStatus oldLevel = interrupt->SetLevel(IntOff);	// disable interrupts
 
     // check if thread has lock ... isHeldByCurrentThread
-
     // if not, do nothing
-
+    
+    while (!conditionLock->isHeldByCurrentThread()) { 			// lock not available
+        queue->Append((void *)currentThread);	// so go to sleep
+        currentThread->Sleep();
+    } 
+     
+    // if yes, release the lock and wakeup 1 of the waiting threads in queue
     free = true;
 
-    // if yes, release the lock and wakeup 1 of the waiting threads in queue
+    thread = (Thread *)queue->Remove();
+    if (thread != NULL)	   // make thread ready, consuming the V immediately
+	    scheduler->ReadyToRun(thread);
 
     // enable interrupts
+    (void) interrupt->SetLevel(oldLevel);
 }
 
 bool Lock::isHeldByCurrentThread() {
-    return true;
+    return free;
 }
 
 Condition::Condition(const char* debugName) { 
