@@ -76,6 +76,8 @@ ELEVATOR::ELEVATOR(int numFloors)
     elevatorLock = new Lock("ElevatorLock");
 
     // initalize leaving
+    leaving = new Condition *[numFloors];
+
 }
 
 void Elevator(int numFloors)
@@ -141,6 +143,8 @@ void PersonThread(int person)
     Person *p = (Person *)person;
 
     printf("Person %d wants to go from floor %d to %d\n", p->id, p->atFloor, p->toFloor);
+    
+    e.hailElevator(p);
 }
 
 int getNextPersonID()
@@ -160,8 +164,6 @@ void ArrivingGoingFromTo(int atFloor, int toFloor)
     p->id = getNextPersonID();
     p->atFloor = atFloor;
     p->toFloor = toFloor;
-
-    printf("Person %d wants to go from floor %d to %d created.\n", p->id, p->atFloor, p->toFloor);
 
     //Create Person thread
     Thread *t = new Thread("Person " + p->id);
