@@ -114,7 +114,7 @@ void Lock::Acquire() {
 
     // check if lock is free
     // else lock is not free -- add self to queue 
-    while (conditionLock->isHeldByCurrentThread()) { 			// lock not available
+    while (isHeldByCurrentThread()) { 			// lock not available
         queue->Append((void *)currentThread);	// so go to sleep
         currentThread->Sleep();
     } 
@@ -134,7 +134,7 @@ void Lock::Release() {
     // check if thread has lock ... isHeldByCurrentThread
     // if not, do nothing
     
-    while (!conditionLock->isHeldByCurrentThread()) { 			// lock not available
+    while (!isHeldByCurrentThread()) { 			// lock not available
         queue->Append((void *)currentThread);	// so go to sleep
         currentThread->Sleep();
     } 
@@ -142,6 +142,7 @@ void Lock::Release() {
     // if yes, release the lock and wakeup 1 of the waiting threads in queue
     free = true;
 
+    Thread *thread;
     thread = (Thread *)queue->Remove();
     if (thread != NULL)	   // make thread ready, consuming the V immediately
 	    scheduler->ReadyToRun(thread);
