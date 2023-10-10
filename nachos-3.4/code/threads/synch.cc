@@ -169,12 +169,11 @@ void Condition::Signal(Lock* conditionLock) {
 void Condition::Broadcast(Lock* conditionLock) { 
 
     ASSERT(conditionLock->isHeldByCurrentThread()); 
+        printf("held? %d", 1);
 
     // Dequeue all threads in the queue one-by-one
     Thread *thread;
-    while ((thread = (Thread *)queue->Remove()) == NULL){
+    while ((thread = (Thread *)queue->Remove()) == NULL)
         // Wakeup each thread
-        printf("ready to run%d", 1);
         scheduler->ReadyToRun(thread);
-    }
 }
