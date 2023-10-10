@@ -101,6 +101,8 @@ void ELEVATOR::hailElevator(Person *p)
     // 2.5 Acquire elevatorLock;
     elevatorLock->Acquire();
 
+    printf("Person %d got lock?. \n", p->id);
+
     // 3. wait for the elevator to arrive atFloor [entering[p->atFloor]->wait(elevatorLock)]
     while (currentFloor != p->atFloor)
     {
