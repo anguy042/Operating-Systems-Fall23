@@ -34,6 +34,7 @@ void ELEVATOR::start()
             printf("Elevator arrives on floor %d and broadcast.\n", currentFloor);
 
             //      2. persons atFloor to get in , one at time, checking ocupancyLimit each time
+            entering[currentFloor]->Signal(elevatorLock);
 
             //      2.5 release elevatorLock
             elevatorLock->Release();
