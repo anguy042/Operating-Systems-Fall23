@@ -97,7 +97,7 @@ void ELEVATOR::hailElevator(Person *p)
 {
     // 1. increment waitng persons atFloor
     personsWaiting[p->atFloor]++;
-    anyPersonWaiting++
+    anyPersonWaiting++;
 
     // 2. hail Elevator
     // 2.5 Acquire elevatorLock;
