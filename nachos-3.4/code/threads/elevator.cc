@@ -39,7 +39,7 @@ void ELEVATOR::start()
                 currentThread->Yield();
             }
             //      4. go to next floor (update corrent floor)
-            currentFloor = (currentFloor + 1) % ;
+            currentFloor = (currentFloor % (maxFloor+1)) + 1;
 
             //  print("Elevator arrives on floor %d.\n", )
             printf("Elevator arrives on floor %d.\n", currentFloor);
@@ -58,6 +58,7 @@ void ElevatorThread(int numFloors)
 
 ELEVATOR::ELEVATOR(int numFloors)
 {
+    maxFloor = numFloors;
     currentFloor = 1;
     entering = new Condition *[numFloors];
     // initialize entering

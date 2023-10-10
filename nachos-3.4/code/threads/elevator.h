@@ -24,6 +24,7 @@ public:
 
 private:
     int currentFloor;
+    int maxFloor;
     Condition **entering;
     Condition **leaving;
     int *personsWaiting;
