@@ -26,13 +26,12 @@ void ELEVATOR::start()
 
             //      0. Acquire elevatorLock
             elevatorLock->Acquire();
+            //at the currentFloor a signal will be broadcasted
+            printf("Elevator arrives on floor %d and broadcast.\n", currentFloor);
 
             //      1. Signal persons inside elevator to get off (leaving->broadcast(elevatorLock))
             if(occupancy)
                 leaving[currentFloor]->Broadcast(elevatorLock);
-            
-            //at the currentFloor a signal will be broadcasted
-            printf("Elevator arrives on floor %d and broadcast.\n", currentFloor);
 
             //      2. persons atFloor to get in , one at time, checking ocupancyLimit each time
             

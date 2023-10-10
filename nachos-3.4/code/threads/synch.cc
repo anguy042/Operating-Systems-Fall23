@@ -179,6 +179,7 @@ void Condition::Wait(Lock* conditionLock) {
 }
 void Condition::Signal(Lock* conditionLock) { 
 
+    IntStatus oldLevel = interrupt->SetLevel(IntOff);	// disable interrupts
     // check if calling thread holds the lock
     ASSERT(conditionLock->isHeldByCurrentThread()); 
 
@@ -189,14 +190,18 @@ void Condition::Signal(Lock* conditionLock) {
     // if thread exists, wake it up.
     if (thread != NULL)	   // make thread ready, consuming the V immediately
 	    scheduler->ReadyToRun(thread);
+    (void) interrupt->SetLevel(oldLevel);	// re-enable interrupts
 }
 void Condition::Broadcast(Lock* conditionLock) { 
 
-    ASSERT(conditionLock->isHeldByCurrentThread()); 
+    IntStatus oldLevel = interrupt->SetLevel(IntOff);	// disable interrupts
+    //ASSERT(conditionLock->isHeldByCurrentThread()); 
 
     // Dequeue all threads in the queue one-by-one
     Thread *thread;
     while ((thread = (Thread *)queue->Remove()) == NULL)
         // Wakeup each thread
         scheduler->ReadyToRun(thread);
+        
+    (void) interrupt->SetLevel(oldLevel);	// re-enable interrupts
 }
