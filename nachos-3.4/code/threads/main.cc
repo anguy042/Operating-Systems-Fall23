@@ -125,7 +125,7 @@ int main(int argc, char **argv)
 	ThreadTest(n);
 #endif
 
-#if defined(HW_LOCKS)
+#if defined(HW1_LOCKS)
 	LockTest();
 #endif
 
