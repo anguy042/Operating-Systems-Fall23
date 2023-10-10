@@ -23,6 +23,7 @@ void ELEVATOR::start()
         while (anyPersonWaiting > 0)
         {
             //assuming there must be atleast 1 person in the elevator
+            printf("Elevator arrives on floor %d and try to acquire lock.\n", currentFloor);
 
             //      0. Acquire elevatorLock
             elevatorLock->Acquire();
