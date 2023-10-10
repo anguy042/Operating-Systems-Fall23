@@ -28,6 +28,7 @@ private:
     Condition **entering;
     Condition **leaving;
     int *personsWaiting;
+    int anyPersonWaiting;
     int occupancy;
     int maxOccupancy;
     Lock *elevatorLock;

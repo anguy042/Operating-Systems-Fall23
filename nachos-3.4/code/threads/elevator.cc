@@ -20,7 +20,7 @@ void ELEVATOR::start()
             currentThread->Yield();
         }
         // B. While there are active persons, loop doing the following
-        while (occupancy > 0)
+        while (anyPersonWaiting > 0)
         {
             //assuming there must be atleast 1 person in the elevator
 
@@ -97,6 +97,7 @@ void ELEVATOR::hailElevator(Person *p)
 {
     // 1. increment waitng persons atFloor
     personsWaiting[p->atFloor]++;
+    anyPersonWaiting++
 
     // 2. hail Elevator
     // 2.5 Acquire elevatorLock;
@@ -114,6 +115,7 @@ void ELEVATOR::hailElevator(Person *p)
 
     // 6. decrement persons waitng atFloor [personsWaiting[atFloor]++]
     personsWaiting[p->atFloor]--;
+    anyPersonWaiting--;
     //subtracting the # of people waiting
 
     // 7. increment persons inside elevator [ocupancy++]
