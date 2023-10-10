@@ -125,9 +125,9 @@ int main(int argc, char **argv)
 	ThreadTest(n);
 #endif
 
-#if defined(HW1_LOCKS)
-	LockTest();
-#endif
+// #if defined(HW1_LOCKS)
+// 	LockTest();
+// #endif
 
 #if defined(CHANGED) && defined(HW1_CONDITION)
 	//Invoke Ping() if demonstrating HW1_CONDITION.
