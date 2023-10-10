@@ -27,6 +27,7 @@ void ELEVATOR::start()
 
             //      0. Acquire elevatorLock
             elevatorLock->Acquire();
+            printf("Elevator arrives on floor %d and got lock.\n", currentFloor);
 
             //      1. Signal persons inside elevator to get off (leaving->broadcast(elevatorLock))
             leaving[currentFloor]->Broadcast(elevatorLock);
