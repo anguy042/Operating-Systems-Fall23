@@ -118,14 +118,14 @@ int main(int argc, char **argv)
 	ThreadTest();
 #endif
 
-#if defined(HW1_SEMAPHORES)
+#if defined(HW1_SEMAPHORES123)
 	//Provide an integer argument for the HW1_SEMAPHORES
 	//and HW1_LOCKS demonstrations:
 	int n = 4;
 	ThreadTest(n);
 #endif
 
-#if defined(HW_LOCKS)
+#if defined(HW1_SEMAPHORES)
 	LockTest();
 #endif
 
