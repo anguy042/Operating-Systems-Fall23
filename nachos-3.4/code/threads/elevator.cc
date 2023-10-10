@@ -20,7 +20,7 @@ void ELEVATOR::start()
             currentThread->Yield();
         }
         // B. While there are active persons, loop doing the following
-        while (anyPersonWaiting > 0)
+        while (anyPersonWaiting > 0 || occupancy > 0)
         {
             //assuming there must be atleast 1 person in the elevator
 
