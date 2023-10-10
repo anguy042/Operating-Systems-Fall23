@@ -10,6 +10,10 @@ void ElevatorTest(int numFloors, int numPersons) {
     Elevator(numFloors);
 
     for (int i = 0 ; i < numPersons; i++) {
+        for(int j =0 ; j< 1000000; j++) {
+            currentThread->Yield();
+        }
+
         int atFloor = (Random() % numFloors) + 1; // choose a random atFloor
         int toFloor = -1 ;
         do {
@@ -18,9 +22,6 @@ void ElevatorTest(int numFloors, int numPersons) {
 
         ArrivingGoingFromTo(atFloor, toFloor);
 
-        for(int j =0 ; j< 1000000; j++) {
-            currentThread->Yield();
-        }
     }
 
 }
