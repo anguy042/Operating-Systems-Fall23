@@ -15,7 +15,10 @@ void ELEVATOR::start()
     {
 
         // A. wait until hailed
-
+        for (int j = 0; j < 1000000; j++)
+        {
+            currentThread->Yield();
+        }
         // B. While there are active persons, loop doing the following
         while (occupancy > 0)
         {
@@ -44,6 +47,7 @@ void ELEVATOR::start()
             //  print("Elevator arrives on floor %d.\n", )
             printf("Elevator arrives on floor %d.\n", currentFloor);
         }
+
     }
 }
 
