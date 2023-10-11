@@ -25,7 +25,7 @@
 #      some functions. 
 
 
-DEFINES = -DTHREADS -DHW1_CONDITION
+DEFINES = -DTHREADS -DHW1_ELEVATOR
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 
