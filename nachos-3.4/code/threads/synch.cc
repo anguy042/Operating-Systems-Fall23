@@ -199,8 +199,10 @@ void Condition::Signal(Lock* conditionLock) {
 void Condition::Broadcast(Lock* conditionLock) { 
 
     IntStatus oldLevel = interrupt->SetLevel(IntOff);	// disable interrupts
-    ASSERT(conditionLock->isHeldByCurrentThread()); 
-
+    while (!conditionLock->isHeldByCurrentThread()) { 			// lock not available
+        queue->Append((void *)currentThread);	// so go to sleep
+        currentThread->Sleep();
+    } 
     // Dequeue all threads in the queue one-by-one
     Thread *thread;
     thread = (Thread *)queue->Remove();
