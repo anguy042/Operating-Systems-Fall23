@@ -32,12 +32,5 @@ Excercise 3 is complete, all functions are implemented.
 EXCERCISE 4 NOTES
 Excercise 4 is complete, all functions are implemented.
 
-OBSERVATION
-
-We are having issues running different tests using the make file input
-It always work if we use "DEFINES = -DTHREADS -DHW1_CONDITION" and change what is been tested on main.cc line 134
-So, to test elevatorTest, we can replace "Ping();" with "ElevatorTest(10, 10);".
-
-
 
 
