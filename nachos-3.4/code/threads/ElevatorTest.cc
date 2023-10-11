@@ -8,7 +8,7 @@ void ElevatorTest(int numFloors, int numPersons) {
 
     // Create elevator thread
     Elevator(numFloors);
-    printf("test  here\n")
+    printf("test  here\n");
     for (int i = 0 ; i < numPersons; i++) {
         for(int j =0 ; j< 1000000; j++) {
             currentThread->Yield();
