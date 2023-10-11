@@ -164,7 +164,6 @@ Condition::~Condition() {
 void Condition::Wait(Lock* conditionLock) { 
     IntStatus oldLevel = interrupt->SetLevel(IntOff);	// disable interrupts
     // check if calling thread holds the lock
-    printf("test Wait");
     ASSERT(conditionLock->isHeldByCurrentThread()); 
 
     // release the lock
@@ -182,7 +181,6 @@ void Condition::Signal(Lock* conditionLock) {
 
     IntStatus oldLevel = interrupt->SetLevel(IntOff);	// disable interrupts
     // check if calling thread holds the lock
-    printf("test Signal");
     ASSERT(conditionLock->isHeldByCurrentThread()); 
 
     // dequeue one of the threads in the queue
