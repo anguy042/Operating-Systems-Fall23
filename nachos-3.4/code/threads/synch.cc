@@ -116,7 +116,6 @@ void Lock::Acquire() {
     // check if lock is free
     // else lock is not free -- add self to queue 
     while (!free) { 			// lock not available
-    printf("is anyone here?");
         queue->Append((void *)currentThread);	// so go to sleep
         currentThread->Sleep();
     } 
