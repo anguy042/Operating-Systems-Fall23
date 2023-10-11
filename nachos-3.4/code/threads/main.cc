@@ -129,7 +129,7 @@ int main(int argc, char **argv)
 	LockTest();
 #endif
 
-#if defined(CHANGED) && defined(HW1_CONDITION)
+#if defined(HW1_CONDITION)
 	//Invoke Ping() if demonstrating HW1_CONDITION.
 	Ping();
 #endif
