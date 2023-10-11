@@ -131,7 +131,7 @@ int main(int argc, char **argv)
 
 #if defined(HW1_CONDITION)
 	//Invoke Ping() if demonstrating HW1_CONDITION.
-	print("test?");
+	printf("test?");
 	Ping();
 #endif
 
