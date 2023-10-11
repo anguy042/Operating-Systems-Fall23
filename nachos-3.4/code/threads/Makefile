@@ -6,11 +6,29 @@
 # Copyright (c) 1992 The Regents of the University of California.
 # All rights reserved.  See copyright.h for copyright notice and limitation 
 # of liability and disclaimer of warranty provisions.
-# -DCHANGED is used to indicate code changed for the project.
+
+#PROJECT 1 DEFINITIONS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+# -DCHANGED is used to indicate code changed for the project
+#  that should not be compiled for the default nachos to run.
 # -DHW1_SEMAPHORES is used only for the synchronization code as specified in 
 #  the exercise.
+# -DHW1_LOCKS is used to demonstrate the locks implemented for
+#  excercise 2.
+# -DHW1_CONDITION is used to compile the code implemented for
+#  exercise 3.
+# -DHW1_ELEVATOR is used to compile the code implemented for
+#  exercise 4. 
 
-DEFINES = -DTHREADS -DHW1_SEMAPHORES -DHW1_LOCKS -DHW1_CONDITON
+#NOTE: DHW1_SEMAPHORES and DHW1_LOCKS should not be used at the
+#      same time, or there will be multiple definitions for 
+#      some functions. 
+
+
+# DEFINES = -DTHREADS
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
 INCPATH = -I../threads -I../machine
 HFILES = $(THREAD_H)
 CFILES = $(THREAD_C)

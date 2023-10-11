@@ -16,7 +16,9 @@
 // testnum is set in main.cc
 int testnum = 1;
 
-#ifdef HW1_SEMAPHORES //SimpleThread() modified version:
+
+
+#ifdef HW1_SEMAPHORES //SimpleThread() modified version for Excercise 1
 int numThreadsActive; // used to implement barrier upon completion
 int SharedVariable;
 Semaphore *mutex = new Semaphore("simple_thread_semaphore", 1);
@@ -52,7 +54,48 @@ printf("Thread %d sees final value %d\n", which, val);
 
 }
 
-#else //SimpleThread Original:
+#endif //HW1 Semaphores end
+
+
+#ifdef HW1_LOCKS //Exercise 2 code-------------------------------
+int numThreadsActive; // used to implement barrier upon completion
+int SharedVariable;
+Semaphore *mutex = new Semaphore("simple_thread_semaphore", 1);
+
+void SimpleThread(int which){
+
+    int num, val;
+    for(num = 0; num < 5; num++){
+
+        //Entry section----------
+        mutex->P();
+
+        val = SharedVariable;
+        printf("*** thread %d sees value %d\n", which, val);
+        currentThread->Yield();
+        SharedVariable = val+1;
+
+        //Exit section------------
+        mutex->V();
+
+        currentThread->Yield();
+    }
+
+    numThreadsActive = numThreadsActive - 1; //Should I synchronize this?
+
+    while(numThreadsActive > 0){
+        currentThread->Yield();
+    }
+
+
+val = SharedVariable;
+printf("Thread %d sees final value %d\n", which, val);
+
+}
+#endif //HW1_LOCKS
+
+
+#if !defined(HW1_SEMAPHORES) && !defined(HW1_LOCKS)
 //----------------------------------------------------------------------
 // SimpleThread
 // 	Loop 5 times, yielding the CPU to another ready thread 
@@ -72,7 +115,7 @@ SimpleThread(int which)
         currentThread->Yield();
     }
 }
-#endif //SimpleThread end
+#endif //original SimpleThread()
 
 //----------------------------------------------------------------------
 // ThreadTest1
@@ -95,7 +138,12 @@ ThreadTest1()
 // ThreadTest
 // 	Invoke a test routine.
 //----------------------------------------------------------------------
-#ifdef HW1_SEMAPHORES
+#if defined(HW1_SEMAPHORES) || defined(HW1_LOCKS)
+//Both demonstrations of the semaphores and the locks
+//require this implementation of ThreadTest() 
+//to call the threads. 
+
+
 // Taken from TA's Materials ~~~~~~~~ 
 // Modified version of ThreadTest that takes an integer n
 // and creates n new threads, each calling SimpleThread and
