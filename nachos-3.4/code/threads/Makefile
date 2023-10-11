@@ -25,7 +25,7 @@
 #      some functions. 
 
 
-# DEFINES = -DTHREADS
+DEFINES = -DTHREADS -DHW1_CONDITION
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 
