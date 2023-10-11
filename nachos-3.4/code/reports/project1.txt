@@ -24,13 +24,13 @@ After implementing the semaphores, I can see that now the threads each take turn
 and then they all see the same value at the end. Even when the -rs value is used the threads take turns out of order.
 
 EXCERCISE 2 NOTES
-Excercise 2 is complete, all condition functions are implemented.
+Excercise 2 is complete, all functions are implemented.
 
 EXCERCISE 3 NOTES
-Excercise 3 is complete, all condition functions are implemented.
+Excercise 3 is complete, all functions are implemented.
 
 EXCERCISE 4 NOTES
-Excercise 4 is complete, all condition functions are implemented.
+Excercise 4 is complete, all functions are implemented.
 
 OBSERVATION
 
